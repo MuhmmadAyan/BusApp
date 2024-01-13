@@ -64,12 +64,11 @@ client.on('message', async (topic, message) => {
   io.emit('data', receivedData); // Emit the received data to all connected clients
 });
 
-// Serve the React app
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
-
-// Handle all other routes by serving the React app's index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+// Serve static files from the current directory
+app.use(express.static(__dirname));
+// Express route to serve the HTML page
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/new.html');
 });
 
 // Socket.IO connection event handler
