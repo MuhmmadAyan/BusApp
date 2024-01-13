@@ -1,0 +1,110 @@
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+const char* ssid = "Wokwi-GUEST";
+const char* password = "";
+const char* mqtt_server = "13.233.250.28";
+const int mqtt_port = 1883; // default MQTT port
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+unsigned long lastMessageTime = 0;
+const unsigned long messageInterval = 2000; // Send a message every 2 seconds
+
+float latitude = 34.081522;  // Starting latitude
+float longitude = 74.784089; // Starting longitude
+float speed = 15.0; // Initial speed in kmph
+String currentTime = "IST"; // Use a different name for the time variable
+
+void setup() {
+  Serial.begin(115200);
+  delay(10);
+
+  // Connect to Wi-Fi
+  Serial.println();
+  Serial.println("Connecting to WiFi");
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+
+  // Connect to MQTT broker
+  client.setServer(mqtt_server, mqtt_port);
+  client.setKeepAlive(30); // Set keepalive interval to 30 seconds
+
+  while (!client.connected()) {
+    Serial.println("Attempting MQTT connection...");
+    if (client.connect("ESP32Client")) {
+      Serial.println("Connected to MQTT broker");
+      // Send the first message immediately
+      publishData();
+      lastMessageTime = millis();
+    } else {
+      Serial.print("Failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" Retrying in 5 seconds...");
+      delay(5000);
+    }
+  }
+}
+
+void loop() {
+  if (!client.connected()) {
+    reconnect();
+  }
+
+  // Maintain the MQTT connection
+  client.loop();
+
+  // Check if it's time to send a new message
+  unsigned long currentTimeMillis = millis();
+  if (currentTimeMillis - lastMessageTime >= messageInterval) {
+    publishData();
+    lastMessageTime = currentTimeMillis;
+  }
+}
+
+void publishData() {
+  // Update data (simulate movement)
+  moveObject();
+
+  // Publish the data to the MQTT topic
+  String message = "Lat/Lon/Speed/Time: " + String(latitude, 6) + ", " + String(longitude, 6) + ", " + String(speed) + " kmph, " + currentTime;
+  client.publish("ayan", message.c_str());
+  Serial.print("Published: ");
+  Serial.println(message);
+}
+
+void moveObject() {
+  // Simulate movement by changing latitude, longitude, and speed
+  // Calculate the movement based on the specified waypoints
+  // Adjust the values based on the desired path and speed
+
+  // Update the speed by increasing it by 1 kmph
+  speed += 20.0;
+
+  // Adjust latitude and longitude based on the desired path
+  latitude -= 0.0001; // Adjust as needed
+  longitude -= 0.0001; // Adjust as needed
+}
+
+void reconnect() {
+  while (!client.connected()) {
+    Serial.println("Attempting MQTT connection...");
+    if (client.connect("ESP32Client")) {
+      Serial.println("Connected to MQTT broker");
+      // Resubscribe to topics if needed
+      client.subscribe("ayan");
+    } else {
+      Serial.print("Failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" Retrying in 5 seconds...");
+      delay(5000);
+    }
+  }
+}
+
