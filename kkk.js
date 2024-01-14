@@ -11,14 +11,20 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 // MongoDB configuration
-const mongoURI = 'mongodb://admin:password@localhost:27017/admin'; // Default admin database
+const mongoURI = 'mongodb://root:example@localhost:27017/admin'; // Default admin database
 
+console.log('Connecting to MongoDB...');
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
+
 db.once('open', () => {
   console.log('Connected to MongoDB');
+  // Now that we are connected, you can proceed with other operations
+  startServer();
 });
 
 // Define a Mongoose model for your data
@@ -28,7 +34,7 @@ const DataModel = mongoose.model('Data', {
 });
 
 // MQTT broker configuration
-const brokerUrl = 'mqtt://13.233.250.28'; // Replace with your MQTT broker's IP address or hostname
+const brokerUrl = 'mqtt://3.110.179.160'; // Replace with your MQTT broker's IP address or hostname
 const topic = 'ayan'; // Replace with your desired topic
 
 // Create MQTT client
@@ -39,8 +45,8 @@ let receivedData = ''; // Use a single string to store the latest data
 
 // MQTT client event handlers
 client.on('connect', () => {
-  client.subscribe(topic);
   console.log('Connected to MQTT broker');
+  client.subscribe(topic);
 });
 
 client.on('message', async (topic, message) => {
@@ -54,6 +60,7 @@ client.on('message', async (topic, message) => {
 
   // Save data to MongoDB using async/await
   try {
+    console.log('Saving data to MongoDB...');
     const newData = new DataModel({ content, timestamp });
     await newData.save();
     console.log('Data saved to MongoDB');
@@ -82,7 +89,9 @@ io.on('connection', (socket) => {
 });
 
 // Start the server
-server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+function startServer() {
+  server.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
 
