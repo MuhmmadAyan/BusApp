@@ -14,7 +14,7 @@ const io = socketIO(server);
 const mongoURI = 'mongodb://root:example@localhost:27017/admin'; // Default admin database
 
 console.log('Connecting to MongoDB...');
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true  });
 
 const db = mongoose.connection;
 db.on('error', (err) => {
@@ -34,7 +34,7 @@ const DataModel = mongoose.model('Data', {
 });
 
 // MQTT broker configuration
-const brokerUrl = 'mqtt://3.110.179.160'; // Replace with your MQTT broker's IP address or hostname
+const brokerUrl = 'mqtt://3.110.33.122'; // Replace with your MQTT broker's IP address or hostname
 const topic = 'ayan'; // Replace with your desired topic
 
 // Create MQTT client
