@@ -3,7 +3,7 @@
 .bus-tracking-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center content horizontally */
+    align-items: flex-start; /* Align content to the left horizontally */
     justify-content: center; /* Center content vertically */
     padding: 35px; /* Add padding to create space around the content */
   }
@@ -13,9 +13,12 @@
   }
   
   .map-container {
-    width: 85%; /* Make the map container take up 85% of the available width */
+    width: 65%; /* Make the map container take up 65% of the available width */
     height: 550px; /* Set the height as needed */
-    margin: auto; /* Center the map container horizontally */
     /* Add any other styles for the map container as needed */
   }
+  /* styles.css */
+
+
+
   
