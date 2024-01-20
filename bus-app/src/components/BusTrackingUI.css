@@ -1,0 +1,21 @@
+/* BusTrackingUI.css */
+
+.bus-tracking-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+    padding: 35px; /* Add padding to create space around the content */
+  }
+  
+  .text-left {
+    margin-bottom: 35px; /* Add margin to create space between heading and map container */
+  }
+  
+  .map-container {
+    width: 85%; /* Make the map container take up 85% of the available width */
+    height: 550px; /* Set the height as needed */
+    margin: auto; /* Center the map container horizontally */
+    /* Add any other styles for the map container as needed */
+  }
+  

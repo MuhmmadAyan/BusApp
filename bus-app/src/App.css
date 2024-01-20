@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+/* src/App.css */
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.bus-tracking-container {
+  padding: 20px;
+}
+
+.map-container {
+  height: 500px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+}
