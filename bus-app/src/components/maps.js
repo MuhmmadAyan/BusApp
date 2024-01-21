@@ -31,7 +31,7 @@ const Map = () => {
         <GoogleMap
           mapContainerStyle={{ width: '100%', height: '100%' }}
           center={{ lat: 34.081501,lng: 74.784230}} // Initial center coordinates
-          zoom={10} // Initial zoom level
+          zoom={15} // Initial zoom level
           ref={mapRef}
         >
           {/* Add markers or other map features as needed */}
