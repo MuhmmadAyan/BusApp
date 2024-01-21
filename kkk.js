@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const mqtt = require('mqtt');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
@@ -10,69 +9,36 @@ const port = 5000;
 const server = http.createServer(app);
 const io = socketIO(server);
 
-// MongoDB configuration
-const mongoURI = 'mongodb://root:example@localhost:27017/admin'; // Default admin database
+// Existing MongoDB connection for incoming data
+const mqttMongoURI = 'mongodb://root:example@localhost:27017/admin'; // Default admin database
 
-console.log('Connecting to MongoDB...');
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true  });
+// MongoDB configuration for fetching data
+const routesMongoURI = 'mongodb://yourUser:yourPassword@localhost:27017/routes'; // Specify the 'routes' database
+const collectionName = '-21b'; // Specify the collection name
 
-const db = mongoose.connection;
-db.on('error', (err) => {
-  console.error('MongoDB connection error:', err);
+console.log('Connecting to MQTT MongoDB...');
+mongoose.connect(mqttMongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const mqttDb = mongoose.connection;
+mqttDb.on('error', (err) => {
+  console.error('MQTT MongoDB connection error:', err);
 });
 
-db.once('open', () => {
-  console.log('Connected to MongoDB');
+mqttDb.once('open', () => {
+  console.log('Connected to MQTT MongoDB');
   // Now that we are connected, you can proceed with other operations
   startServer();
 });
 
-// Define a Mongoose model for your data
+// Define a Mongoose model for incoming data
 const DataModel = mongoose.model('Data', {
   content: String,
   timestamp: { type: Date, default: Date.now },
 });
 
-// MQTT broker configuration
-const brokerUrl = 'mqtt://3.110.33.122'; // Replace with your MQTT broker's IP address or hostname
-const topic = 'ayan'; // Replace with your desired topic
-
-// Create MQTT client
-const client = mqtt.connect(brokerUrl);
-
-// Store received data
-let receivedData = ''; // Use a single string to store the latest data
-
-// MQTT client event handlers
-client.on('connect', () => {
-  console.log('Connected to MQTT broker');
-  client.subscribe(topic);
-});
-
-client.on('message', async (topic, message) => {
-  const content = message.toString();
-  receivedData = content; // Update the stored data with the latest content
-
-  // Log the received data and timestamp
-  console.log('Received Data:', content);
-  const timestamp = new Date();
-  console.log('Timestamp:', timestamp);
-
-  // Save data to MongoDB using async/await
-  try {
-    console.log('Saving data to MongoDB...');
-    const newData = new DataModel({ content, timestamp });
-    await newData.save();
-    console.log('Data saved to MongoDB');
-  } catch (error) {
-    console.error('Error saving data to MongoDB:', error);
-  }
-
-  io.emit('data', receivedData); // Emit the received data to all connected clients
-});
-
 // Serve static files from the current directory
 app.use(express.static(__dirname));
+
 // Express route to serve the HTML page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/new.html');
@@ -81,11 +47,34 @@ app.get('/', (req, res) => {
 // Socket.IO connection event handler
 io.on('connection', (socket) => {
   console.log('A client connected');
-  socket.emit('data', receivedData); // Send the initial data to the connected client
-
+  // Emit the initial data to the connected client if needed
+  // socket.emit('data', initialData);
+  
   socket.on('disconnect', () => {
     console.log('A client disconnected');
   });
+});
+
+// API endpoint to fetch data from the specific collection using the new model
+app.get('/api/routesdata', async (req, res) => {
+  try {
+    // New connection and model for fetching data from the 'routes' database
+    const routesDb = await mongoose.createConnection(routesMongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+    const RoutesDataModel = routesDb.model('RoutesData', {
+      content: String,
+      timestamp: { type: Date, default: Date.now },
+    }, collectionName);
+
+    // Use the new model to fetch data from the specific collection
+    const data = await RoutesDataModel.find().exec();
+    res.json(data);
+
+    // Close the connection after fetching data
+    routesDb.close();
+  } catch (error) {
+    console.error('Error fetching data from MongoDB:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // Start the server
@@ -94,4 +83,3 @@ function startServer() {
     console.log(`Server running on port ${port}`);
   });
 }
-
