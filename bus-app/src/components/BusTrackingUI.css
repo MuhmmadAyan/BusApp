@@ -13,10 +13,11 @@
   }
   
   .map-container {
-    width: 65%; /* Make the map container take up 65% of the available width */
-    height: 550px; /* Set the height as needed */
-    /* Add any other styles for the map container as needed */
+    width: 65%;
+    height: 550px;
+    margin-top: 100px; /* Add 30 pixels of spacing on top */
   }
+  
   /* styles.css */
 
 
