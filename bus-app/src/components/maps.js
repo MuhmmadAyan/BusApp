@@ -11,7 +11,7 @@ const Map = () => {
 
   // Replace 'YOUR_API_KEY' with your actual Google Maps API key
   const GOOGLE_MAPS_API_KEY = 'AIzaSyBVZEPhBRovTPI0l1lLbdb89u33RaRmzg4';
-  const API_ENDPOINT = 'http://13.233.174.8:5000/api/routesdata'; // Replace with your actual API endpoint
+  const API_ENDPOINT = 'http://3.6.37.230:5000/api/routesdata'; // Replace with your actual API endpoint
 
   useEffect(() => {
     const loadScript = async () => {
