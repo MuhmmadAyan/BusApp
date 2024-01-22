@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer, InfoWindow, TrafficLayer } from '@react-google-maps/api';
 import axios from 'axios';
-import TrafficInfo from './trafficinfo'; // Import the TrafficInfo component
 
 const Map = () => {
   const mapRef = useRef();
@@ -18,7 +17,7 @@ const Map = () => {
     const loadScript = async () => {
       try {
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&v=weekly`;
         script.async = true;
         script.onload = () => setIsLoaded(true);
         document.head.appendChild(script);
@@ -68,9 +67,23 @@ const Map = () => {
     }
   }, [routeData]);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  useEffect(() => {
+
+     // Debug statement to check if the Traffic Layer is being initialized
+  console.log('Traffic Layer is being initialized:', TrafficLayer);
+
+  // Additional debug statements if needed
+
+  // TrafficLayer for displaying traffic information
+  <TrafficLayer autoUpdate />
+    console.log('isLoaded:', isLoaded);
+    console.log('routeData:', routeData);
+    console.log('directions:', directions);
+
+    if (error) {
+      console.error('Error:', error);
+    }
+  }, [isLoaded, routeData, directions, error]);
 
   return (
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
@@ -117,7 +130,7 @@ const Map = () => {
           )}
 
           {/* TrafficLayer for displaying traffic information */}
-          <TrafficLayer autoUpdate />
+          <TrafficLayer />
         </GoogleMap>
       )}
     </LoadScript>
