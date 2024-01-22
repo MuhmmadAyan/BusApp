@@ -1,46 +1,31 @@
-import React from 'react'
-export default function Navbar() {
+import React from 'react';
+import './Navbar.css';
+import logo_light from '../assets/logo-black.png';
+import logo_dark from '../assets/logo-white.png';
+import search_icon_light from '../assets/search-w.png';
+import search_icon_dark from '../assets/search-b.png';  // Corrected import
+import toogle_light from '../assets/night.png';
+import toogle_dark from '../assets/day.png';
+
+const Navbar = ({ theme, setTheme }) => {
+  function toggleMode() {
+    theme === 'light' ? setTheme('dark') : setTheme('light');
+  }
+
   return (
-    <nav class="navbar navbar-dark bg-dark fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Bus App</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Bus App</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <div className={`Navbar ${theme === 'light' ? 'light-theme' : 'dark-theme'}`}>
+      <img src={theme === 'light' ? logo_light : logo_dark} alt="" className="logo" />
+      <ul>
+        <li>About Us</li>
+        <li>More</li>
+      </ul>
+      <div className="search-box">
+        <input type="text" placeholder="Search" />
+        <img src={theme === 'light' ? search_icon_light : search_icon_light} alt="" />
       </div>
-      <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About Us</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li>
-                <hr class="dropdown-divider"/>
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-        </ul>
-        <form class="d-flex mt-3" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-          <button class="btn btn-success" type="submit">Search</button>
-        </form>
-      </div>
+      <img onClick={() => toggleMode()} src={theme === 'light' ? toogle_light : toogle_dark} alt="" className="toggle-icon" />
     </div>
-  </div>
-</nav>
-  )
-}
+  );
+};
+
+export default Navbar;

@@ -1,18 +1,19 @@
 import React from 'react';
+import './buses.css';
 
 export default function Buses() {
   return (
-    <div style={{ position: 'absolute', top: '170px', right: '140px' }}>
+    <div style={{ position: 'center', top: '200px', right: '140px' }}>
   <button
     className="btn btn-secondary dropdown-toggle"
     type="button"
     data-bs-toggle="dropdown"
     aria-expanded="false"
-    style={{ fontSize: '35px' }}
+    style={{ fontSize: '40px' }}
   >
     Choose Your Bus  {/* This is the updated text */}
   </button>
-  <ul className="dropdown-menu" style={{ width: '315px' }}>
+  <ul className="dropdown-menu" style={{ width: '400px' }}>
     {/* Adjust the width value as needed */}
     <li><a className="dropdown-item" href="#">21-A</a></li>
     <li><a className="dropdown-item" href="#">21-B</a></li>

@@ -1,18 +1,20 @@
 // src/App.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
-import BusTrackingUI from './components/BusTrackingUI'; // Import the BusTrackingUI component
+import BusTrackingUI from './components/BusTrackingUI';
 import Buses from './components/buses';
 
-
 function App() {
+  const [theme, setTheme] = useState('light');
+
   return (
     <>
-    <Navbar/>
-    <Buses/>
-    <BusTrackingUI /> {/* Include the BusTrackingUI component */}
+      <Navbar theme={theme} setTheme={setTheme} /> {/* Pass theme and setTheme as props */}
+      <Buses />
+      <BusTrackingUI />
+      
     </>
   );
 }
