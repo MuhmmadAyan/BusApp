@@ -1,5 +1,5 @@
 
-A bus tracking web app that uses google maps api to render the map and show the live location of the Buses (isntalled with iot devices).
+ # A bus tracking web app that uses google maps api to render the map and show the live location of the Buses (isntalled with iot devices).
 
 
 
@@ -24,7 +24,6 @@ MongoDB
 
 
 notes :
-# BusApp
 
 if machine is terminated, use node 18.18 for backend, 21.5 for react, use docke compose to launch db and express conatiner, and hten add data into routes and -21d colleciton (use ss for data), then add user with privlages to use in route mongo url. 
 
