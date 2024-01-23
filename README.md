@@ -1,5 +1,5 @@
 
- # A bus tracking web app that uses google maps api to render the map and show the live location of the Buses (isntalled with iot devices).
+ # A bus tracking web app that uses google maps api to render the map and show the live location of the Buses (installed with iot devices).
 
 
 
