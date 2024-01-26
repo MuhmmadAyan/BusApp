@@ -3,11 +3,15 @@ const mongoose = require('mongoose');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
+const cors = require('cors'); // Import the cors middleware
 
 const app = express();
 const port = 5000;
 const server = http.createServer(app);
 const io = socketIO(server);
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Existing MongoDB connection for incoming data
 const mqttMongoURI = 'mongodb://root:example@localhost:27017/admin'; // Default admin database
