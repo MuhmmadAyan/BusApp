@@ -1,5 +1,7 @@
 
  # A bus tracking web app that uses google maps api to render the map and show the live location of the Buses (installed with iot devices).
+ # Architecture Diagram 
+ ![Diagram drawio](https://github.com/MuhmmadAyan/BusApp/assets/91903218/4d753129-632a-41d6-a9ee-0b4d6943786f)
 
 
 
