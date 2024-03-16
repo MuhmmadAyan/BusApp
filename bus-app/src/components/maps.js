@@ -10,7 +10,7 @@ const Map = () => {
   const [directions, setDirections] = useState(null);
 
   // Replace 'YOUR_API_KEY' with your actual Google Maps API key
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyBVZEPhBRovTPI0l1lLbdb89u33RaRmzg4';
+  const GOOGLE_MAPS_API_KEY = '';
   const API_ENDPOINT = 'http://3.6.37.230:5000/api/routesdata'; // Replace with your actual API endpoint
 
   useEffect(() => {
